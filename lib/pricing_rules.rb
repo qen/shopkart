@@ -16,10 +16,12 @@ class BundleRule
     if not products.empty? and current_bundle.empty?
       values = products.first.values
       multiplier = products.map(&:qty).sum.to_i / @size
-      bundle = Bundle.new *values
-      bundle.qty = @free_count * multiplier
-      bundle.price *= -1
-      items << bundle
+      if multiplier > 0
+        bundle = Bundle.new *values
+        bundle.qty = @free_count * multiplier
+        bundle.price *= -1
+        items << bundle
+      end
     end
 
     items.map(&:subtotal).sum
