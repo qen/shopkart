@@ -5,6 +5,7 @@ Item = Struct.new(:code, :name, :price, :qty) do
   end
 
   def subtotal
+    return 0 if price.nil? or qty.nil?
     price * qty
   end
 end

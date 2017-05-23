@@ -87,6 +87,21 @@ end
 class PromoRule
   def initialize(code, discount)
     @code = code
-    @discount = discount
+    @discount = discount.to_i
+  end
+
+  def total(items, current_total = 0)
+    current_promo = items.select {|item| item.type == 'promo' and item.code == @code }.first
+
+    if not current_promo.nil?
+      total_discount = (1.0 - (@discount / 100.0))
+      discounted_total = current_total * (1.0 - (@discount / 100.0))
+
+      current_promo.name = "#{@discount.to_i}% discount"
+      current_promo.price = (discounted_total - current_total)
+      current_promo.qty = 1
+    end
+
+    discounted_total
   end
 end

@@ -8,11 +8,12 @@ describe ShoppingCart do
   let(:ult_medium) { Product.new 'ult_medium', 'Unlimited 2GB', 29.90, 1 }
   let(:ult_large) { Product.new 'ult_large', 'Unlimited 5GB', 44.90, 1 }
   let(:one_gig) { Product.new '1gb', '1 GB Data-pack', 9.90, 1 }
-  let(:promo) { Promo.new 'I<3AMAYSIM', 'I<3AMAYSIM' }
+  let(:promo) { Promo.new 'I<3AMAYSIM' }
 
   let(:bundle_rule) { BundleRule.new 'ult_small', 3, 1 }
   let(:discount_rule) { DiscountRule.new 'ult_large', 3, -5 }
   let(:freebie_rule) { FreebieRule.new 'ult_medium', 1, one_gig }
+  let(:promo_rule) { PromoRule.new 'I<3AMAYSIM', 10 }
 
   describe ".add" do
     context "multiple add of the same item" do
@@ -125,6 +126,36 @@ describe ShoppingCart do
 
     it "Expects Discount Item Modifier" do
       expect(cart.discounts.size).to eq(1)
+    end
+
+  end
+
+  context "scenario 4" do
+
+    let(:cart) do
+      cart = ShoppingCart.new([promo_rule])
+      cart.add(ult_small)
+      cart.add(one_gig, promo)
+      cart.total
+      cart
+    end
+
+    it "Expected Cart Total $31.32" do
+      expect(cart.total).to eq(31.32)
+    end
+
+    it "Expected Cart Item: 1 x Unlimited 1 GB" do
+      item = cart.items.select {|item| item.code == 'ult_small' }.first
+      expect(item.qty).to eq(1)
+    end
+
+    it "Expected Cart Item: 1 X 1 GB Data-pack" do
+      item = cart.items.select {|item| item.code == '1gb' }.first
+      expect(item.qty).to eq(1)
+    end
+
+    it "Expects Promo Item Modifier" do
+      expect(cart.promos.size).to eq(1)
     end
 
   end

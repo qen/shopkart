@@ -39,4 +39,8 @@ class ShoppingCart
     @items.select {|item| item.type == 'discount' }
   end
 
+  def promos
+    @items.select {|item| item.type == 'promo' }
+  end
+
 end
