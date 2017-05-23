@@ -26,9 +26,7 @@ class ShoppingCart
   end
 
   def items
-    # @pricing_rules.items(@items)
     @items.select {|item| item.type == 'product' }
-    # @items
   end
 
   def bundles

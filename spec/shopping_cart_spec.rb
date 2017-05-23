@@ -14,6 +14,7 @@ describe ShoppingCart do
   let(:discount_rule) { DiscountRule.new 'ult_large', 3, -5 }
   let(:freebie_rule) { FreebieRule.new 'ult_medium', 1, one_gig }
   let(:promo_rule) { PromoRule.new 'I<3AMAYSIM', 10 }
+  let(:pricing_rules) { [promo_rule, freebie_rule, discount_rule, bundle_rule] }
 
   describe ".add" do
     context "multiple add of the same item" do
@@ -36,7 +37,7 @@ describe ShoppingCart do
   context "scenario 1" do
 
     let(:cart) do
-      cart = ShoppingCart.new([bundle_rule])
+      cart = ShoppingCart.new(pricing_rules)
       ult_small.qty = 3
       cart.add(ult_small, ult_large)
       cart.total
@@ -66,7 +67,7 @@ describe ShoppingCart do
   context "scenario 2" do
 
     let(:cart) do
-      cart = ShoppingCart.new([discount_rule])
+      cart = ShoppingCart.new(pricing_rules)
       ult_small.qty = 2
       ult_large.qty = 4
       cart.add(ult_small, ult_large)
@@ -97,7 +98,7 @@ describe ShoppingCart do
   context "scenario 3" do
 
     let(:cart) do
-      cart = ShoppingCart.new([freebie_rule])
+      cart = ShoppingCart.new(pricing_rules)
       ult_small.qty = 1
       ult_medium.qty = 2
       cart.add(ult_small, ult_medium)
@@ -133,7 +134,7 @@ describe ShoppingCart do
   context "scenario 4" do
 
     let(:cart) do
-      cart = ShoppingCart.new([promo_rule])
+      cart = ShoppingCart.new(pricing_rules)
       cart.add(ult_small)
       cart.add(one_gig, promo)
       cart.total
