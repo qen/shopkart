@@ -12,6 +12,7 @@ describe ShoppingCart do
 
   let(:bundle_rule) { BundleRule.new 'ult_small', 3, 1 }
   let(:discount_rule) { DiscountRule.new 'ult_large', 3, -5 }
+  let(:freebie_rule) { FreebieRule.new 'ult_medium', 1, one_gig }
 
   describe ".add" do
     context "multiple add of the same item" do
@@ -90,15 +91,42 @@ describe ShoppingCart do
       expect(cart.discounts.size).to eq(1)
     end
 
-
   end
 
-  # describe ".add" do
-  #   context "given an empty string" do
-  #     it "returns type" do
-  #       expect(Bundle.new.type).to eql('bundle')
-  #     end
-  #   end
-  # end
+  context "scenario 3" do
+
+    let(:cart) do
+      cart = ShoppingCart.new([freebie_rule])
+      ult_small.qty = 1
+      ult_medium.qty = 2
+      cart.add(ult_small, ult_medium)
+      cart.total
+      cart
+    end
+
+    it "Expected Cart Total $84.70" do
+      expect(cart.total).to eq(84.70)
+    end
+
+    it "Expected Cart Item: 1 x Unlimited 1 GB" do
+      item = cart.items.select {|item| item.code == 'ult_small' }.first
+      expect(item.qty).to eq(1)
+    end
+
+    it "Expected Cart Item: 2 x Unlimited 2 GB" do
+      item = cart.items.select {|item| item.code == 'ult_medium' }.first
+      expect(item.qty).to eq(2)
+    end
+
+    it "Expected Cart Item: 2 X 1 GB Data-pack" do
+      item = cart.items.select {|item| item.code == '1gb' }.first
+      expect(item.qty).to eq(2)
+    end
+
+    it "Expects Discount Item Modifier" do
+      expect(cart.discounts.size).to eq(1)
+    end
+
+  end
 
 end
