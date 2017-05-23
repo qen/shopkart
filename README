@@ -1,0 +1,4 @@
+
+
+    bundle install --path .bundle
+    bundle exec rspec
