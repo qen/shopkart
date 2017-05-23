@@ -17,3 +17,6 @@ end
 
 class Promo < Item
 end
+
+class Discount < Item
+end

@@ -35,4 +35,8 @@ class ShoppingCart
     @items.select {|item| item.type == 'bundle' }
   end
 
+  def discounts
+    @items.select {|item| item.type == 'discount' }
+  end
+
 end
